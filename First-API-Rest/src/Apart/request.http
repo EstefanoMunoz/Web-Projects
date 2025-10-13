@@ -1,1 +1,4 @@
-    
+### API de Open Public APIs - General para GET
+GET https://fakestoreapi.com/products
+
+### Inicio de los CRUD
