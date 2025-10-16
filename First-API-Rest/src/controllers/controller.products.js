@@ -19,4 +19,29 @@ export class ProductController {
         res.json(products);     // Hago una serialización, es decir, convierto "productos" de un objeto a un string json (con .json()) y lo envio como respuesta HTTP.
     }
 
+    getById = async (req, res) => {
+        const { id } = req.params;  // Asi recupero el ":id" que se suma en la url.
+        const product = await this.ProductModelType.getById({ id });    // Nada mas se encargaria de mandarle la id recuperada anteriormente, y recibi el producto; y no de saber el proceso para buscar el producto (buena practica).
+        res.json(product);  // Envio el producto en formato json como una response HTTP.
+    }
+
+    update = async (req, res) => {  // Este es para el patch y/o put.
+        const input = req.body;     // Recupero el cuerpo del json que se envio en la request.
+        const { id } = req.params;
+        const product = await this.ProductModelType.update({ id: id, input: input });
+        res.json(product);
+    }
+
+    create = async (req, res) => {
+        const input = req.body;
+        const product = await this.ProductModelType.create({ input });
+        res.json(product);
+    }
+
+    delete = async (req, res) => {
+        const { id } = req.params;
+        const product = await this.ProductModelType.delete({ id });
+        res.json(product);
+    }
+
 }

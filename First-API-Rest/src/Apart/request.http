@@ -1,4 +1,31 @@
-### API de Open Public APIs - General para GET
-GET https://fakestoreapi.com/products
+### Esta es la API de "Open Public APIs". Con este se toda la lista de jsons.
+GET http://fakestoreapi.com/products
 
-### Inicio de los CRUD
+### Get obtener de mi servidor backend toda la lista de productos.
+GET http://localhost:3000/products/17
+
+### Path para actualizar una propiedad de un producto
+PATCH http://localhost:3000/products/3
+Content-Type: application/json
+
+{
+    "price": 73.54
+}
+
+### Path para reemplazar un producto por completo
+PATCH http://localhost:3000/products/3
+Content-Type: application/json
+
+{
+    "id": 90,
+    "title": "El hombre araña",
+    "price": 2000,
+    "description": "It's a movie",
+    "category": "drama",
+    "imagen": "fjalksjdlfkjaslkdjflkasj",
+    "rating": {
+        "rate": 6.2,
+        "count": 100,
+    }
+
+}
