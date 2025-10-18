@@ -1,12 +1,16 @@
 
-import { productSchema } from "../schemas/schema.product";
-import { createError } from "../Utils/createError";
+import productSchema from "../schemas/schema.product.js";
+import { createError } from "../Utils/createError.js";
 
 export function validateProduct(req, res, next) {
+    // Sirve tanto para actualizar para validar un objeto js con todos los parametros o con parametros opcionales ingresados.x
 
-    const result = productSchema.Partial().safeParse()
+    const result = productSchema.partial().safeParse(req.body); // Le pasamos el body de la petición para verificar si cumple con el schema de producto.
     if (!result.success) {
-        createError({ message: result.error.format(), status: 400, next }); 
+        const err = createError({
+            message: JSON.stringify(result.error.format(), null, 2),
+            status: 400
+        }); 
         /*
             Con "result.error.format()" mostraria los errores encontrados en cada parametro:
                 {
@@ -21,8 +25,9 @@ export function validateProduct(req, res, next) {
                 }
 
         */
-        return;
+        return next(err);   // Lanzo el error para que el errorHandler lo reciba y lo trate.
     }
 
-    return result;
+    req.validatedData = result.data;    // Le agrego una nueva propiedad al "req" donde guardar los datos validados.
+    return next(); // Si todo va bien, pasa al siguiente callback de la pila de callbacks del mini-servidor (En el router, porque ahi lo estoy colocando).
 }

@@ -15,44 +15,87 @@ export class ProductController {
     }
 
     // Este metodo sera capas de retornar todos los productos, o retornar todos los productos pero filtrandolos segun los parametros recibidos.
-    getAll = async (req, res) => {     // Este metodo es un "fat array function" en vez de una "function" para heredar el "this" de la clase, y no del "this" que crea el "function", y async para no bloquear el flujo y retornar una Promise.
+    getAll = async (req, res, next) => {     // Este metodo es un "fat array function" en vez de una "function" para heredar el "this" de la clase, y no del "this" que crea el "function", y async para no bloquear el flujo y retornar una Promise.
+        
+        let products;
+        try {
+            products = await this.ProductModelType.getAll();   // Uso await para que "products" espere el resultado que retorne .getAll(). (Aqui products es un "objeto js")
+            
+        } catch (err) {
+            return next(err); // Lanzo el error con este catch con contexto: req, res, next para que lo reciba el errorHandler
+        }
+        
         const { title, price, category, rate } = req.query;    // Importante, aqui uso .query y no .params.
-        const products = await this.ProductModelType.getAll();   // Uso await para que "products" espere el resultado que retorne .getAll(). (Aqui products es un "objeto js")
-
         let productsFiltered = [...products];   // Hacemos una copia de los productos.
 
         // Filtramos los productos segun se active acada if (se activa si existe contenido en el parametro o no).
-        if (title) productsFiltered = productsFiltered.filter(p => p.title === title);
-        if (price) productsFiltered = productsFiltered.filter(p => p.price === Number(price));
-        if (category) productsFiltered = productsFiltered.filter(p => p.category === category);
-        if (rate) productsFiltered = productsFiltered.filter(p => p.rating.rate === Number(rate));
+        if (title) productsFiltered = productsFiltered.filter( p => toLowerCase(p.title) === toLowerCase(title) );
+        if (price) productsFiltered = productsFiltered.filter( p => p.price === Number(price) );
+        if (category) productsFiltered = productsFiltered.filter( p => toLowerCase(p.category) === toLowerCase(category) );
+        if (rate) productsFiltered = productsFiltered.filter( p => (p.rating.rate) === Number(rate) );
 
         // Hago una serialización, es decir, convierto "productos" de un objeto a un string json (con .json()) y lo envio como respuesta HTTP.
         res.json(productsFiltered);   // Si no hay parametros de filtrado, se enviaan todos los productos, en caso contrario, se envian los productos filtrados.
     }
 
-    getById = async (req, res) => {
+    getById = async (req, res, next) => {
+        
+        let product;
         const { id } = req.params;  // Asi recupero el ":id" que se suma en la url.
-        const product = await this.ProductModelType.getById({ id });    // Nada mas se encargaria de mandarle la id recuperada anteriormente, y recibi el producto; y no de saber el proceso para buscar el producto (buena practica).
+        
+        try {
+            product = await this.ProductModelType.getById({ id });    // Nada mas se encargaria de mandarle la id recuperada anteriormente, y recibi el producto; y no de saber el proceso para buscar el producto (buena practica).
+            
+        } catch (err) {
+            return next(err); // Lanzo el error con este catch con contexto: req, res, next para que lo reciba el errorHandler.
+        }
+        
         res.json(product);  // Envio el producto en formato json como una response HTTP.
     }
 
-    update = async (req, res) => {  // Este es para el patch y/o put.
-        const input = req.body;     // Recupero el cuerpo del json que se envio en la request.
+    update = async (req, res, next) => {  // Este es para el patch y/o put.
+        
+        let product;
         const { id } = req.params;
-        const product = await this.ProductModelType.update({ id: id, input: input });
+        const input = req.validatedData;     // Recupero el cuerpo del json que se envio en el body de la request, pero, ya validado por un middleware.
+        
+        try {
+            product = await this.ProductModelType.update({ id: id, input: input });
+            
+        } catch (err) {
+            return next(err); // Lanzo el error con este catch con contexto: req, res, next para que lo reciba el errorHandler.
+        }
+        
         res.json(product);
     }
 
-    create = async (req, res) => {
-        const input = req.body;
-        const product = await this.ProductModelType.create({ input });
+    create = async (req, res, next) => {
+        
+        let product;
+        const input = req.validatedData;
+
+        try {
+            product = await this.ProductModelType.create({ input });
+            
+        } catch (err) {
+            return next(err); // Lanzo el error con este catch con contexto: req, res, next para que lo reciba el errorHandler.
+        }
+        
         res.json(product);
     }
 
-    delete = async (req, res) => {
+    delete = async (req, res, next) => {
+        
+        let product;
         const { id } = req.params;
-        const product = await this.ProductModelType.delete({ id });
+
+        try {
+            product = await this.ProductModelType.delete({ id });
+            
+        } catch (err) {
+            return next(err); // Lanzo el error con este catch con contexto: req, res, next para que lo reciba el errorHandler.
+        }
+        
         res.json(product);
     }
 

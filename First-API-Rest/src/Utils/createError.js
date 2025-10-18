@@ -4,11 +4,10 @@ Crea la estructura del error con los parametros: message, status, next y lanza e
 por el errorHandler.
 */
 
-export function createError({ message, status, next }) {
+export function createError({ message, status }) {
     
     const err = new Error( message );
-    
     err.status = status;
-    next(err);  // Lanzo el error para que el errorHandler lo reciba y lo trate.
+    return err;  // Retorno el error creado controladamente para que el controlador o middleware lo lanze.
 
 }

@@ -17,10 +17,9 @@ PATCH http://localhost:3000/products/3
 Content-Type: application/json
 
 {
-    "id": 90,
     "title": "El hombre araña",
-    "price": 2000,
-    "description": "It's a movie",
+    "price": 200.2,
+    "description": "It's a movie that everybody watch at a great moment. So, it's fantastic.",
     "category": "drama",
     "imagen": "fjalksjdlfkjaslkdjflkasj",
     "rating": {
@@ -38,7 +37,7 @@ Content-Type: application/json
     "id": 989,
     "title": "Pacific RIM",
     "price": 9000,
-    "description": "It's the best movie ever watched",
+    "description": "It's the best movie ever watched. It's an action movie about titan robots agains kaijus.",
     "category": "action",
     "imagen": "lkjiwoas{asñlmas}",
     "rating": {
@@ -55,4 +54,10 @@ DELETE http://localhost:3000/products/9
 GET http://localhost:3000/products?title=Fjallraven - Foldsack No. 1 Backpack, Fits 15 Laptops
 
 ### Otro diferente
-GET http://localhost:3000/products?rating={"rate":3.9,"count":120}
+GET http://localhost:3000/products?rate=3.9
+
+### Otro diferente
+GET http://localhost:3000/products?category=men's clothing
+
+### Otro diferente
+GET http://localhost:3000/products?category=men's clothing&price=15.99

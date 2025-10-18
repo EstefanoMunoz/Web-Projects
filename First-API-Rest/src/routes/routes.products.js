@@ -6,6 +6,7 @@
 
 import { Router } from "express";
 import { ProductController } from "../controllers/controller.products.js"
+import { validateProduct } from "../middlewares/validateProduct.js";
 
 export const CreateProductsRoutes = ({ ProductModelType }) => {
 
@@ -34,9 +35,9 @@ export const CreateProductsRoutes = ({ ProductModelType }) => {
     // Express, internamente inyecta automaticamente los parametros (objetos) req y res (y opcionlamente next) al ejecutar getAll.
     router.get("/", controller.getAll);       // Este get es para obtener todos los datos.
     router.get("/:id", controller.getById);   // Este get es para obtener un solo dato segun su id
-    router.patch("/:id", controller.update);  // Este patch es para actualizar parcialmente un producto segun su id, pero para eso, en la petición debe enviar los parametros a actualizar. (el id no se cambia, y el cuerpo de body debe tener un header especificando que es de tipo json)
-    router.put("/:id", controller.update);    // Este put es para actualizar por completo un producto segun su id, pero para eso, en la petición debe enviar todos los parametros a reemplazar. (el id tambien se cambia)
-    router.post("/", controller.create);      // Este post es para crear un nuevo producto.
+    router.patch("/:id", validateProduct, controller.update);  // Este patch es para actualizar parcialmente un producto segun su id, pero para eso, en la petición debe enviar los parametros a actualizar. (el id no se cambia, y el cuerpo de body debe tener un header especificando que es de tipo json)
+    router.put("/:id", validateProduct, controller.update);    // Este put es para actualizar por completo un producto segun su id, pero para eso, en la petición debe enviar todos los parametros a reemplazar. (el id tambien se cambia)
+    router.post("/", validateProduct, controller.create);      // Este post es para crear un nuevo producto.
     router.delete("/:id", controller.delete); // Este delete es para eliminar un producto.
 
     return router;

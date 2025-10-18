@@ -12,7 +12,8 @@
   "author": "Estefano Muñoz",
   "license": "ISC",
   "dependencies": {
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "zod": "^4.1.12"
   },
   "devDependencies": {
     "standard": "^17.1.2"
