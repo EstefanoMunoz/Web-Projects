@@ -14,9 +14,21 @@ export class ProductController {
         this.ProductModelType = ProductModelType;   // Es necesario usar el "this." para decir que se use ese atributo de instancia de la clase.
     }
 
+    // Este metodo sera capas de retornar todos los productos, o retornar todos los productos pero filtrandolos segun los parametros recibidos.
     getAll = async (req, res) => {     // Este metodo es un "fat array function" en vez de una "function" para heredar el "this" de la clase, y no del "this" que crea el "function", y async para no bloquear el flujo y retornar una Promise.
+        const { title, price, category, rate } = req.query;    // Importante, aqui uso .query y no .params.
         const products = await this.ProductModelType.getAll();   // Uso await para que "products" espere el resultado que retorne .getAll(). (Aqui products es un "objeto js")
-        res.json(products);     // Hago una serialización, es decir, convierto "productos" de un objeto a un string json (con .json()) y lo envio como respuesta HTTP.
+
+        let productsFiltered = [...products];   // Hacemos una copia de los productos.
+
+        // Filtramos los productos segun se active acada if (se activa si existe contenido en el parametro o no).
+        if (title) productsFiltered = productsFiltered.filter(p => p.title === title);
+        if (price) productsFiltered = productsFiltered.filter(p => p.price === Number(price));
+        if (category) productsFiltered = productsFiltered.filter(p => p.category === category);
+        if (rate) productsFiltered = productsFiltered.filter(p => p.rating.rate === Number(rate));
+
+        // Hago una serialización, es decir, convierto "productos" de un objeto a un string json (con .json()) y lo envio como respuesta HTTP.
+        res.json(productsFiltered);   // Si no hay parametros de filtrado, se enviaan todos los productos, en caso contrario, se envian los productos filtrados.
     }
 
     getById = async (req, res) => {

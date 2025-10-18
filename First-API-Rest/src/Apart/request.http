@@ -12,7 +12,7 @@ Content-Type: application/json
     "price": 73.54
 }
 
-### Path para reemplazar un producto por completo
+### Patch para reemplazar un producto por completo
 PATCH http://localhost:3000/products/3
 Content-Type: application/json
 
@@ -25,7 +25,34 @@ Content-Type: application/json
     "imagen": "fjalksjdlfkjaslkdjflkasj",
     "rating": {
         "rate": 6.2,
-        "count": 100,
+        "count": 100
     }
 
 }
+
+### Post para crear un nuevo producto
+POST http://localhost:3000/products/
+Content-Type: application/json
+
+{
+    "id": 989,
+    "title": "Pacific RIM",
+    "price": 9000,
+    "description": "It's the best movie ever watched",
+    "category": "action",
+    "imagen": "lkjiwoas{asñlmas}",
+    "rating": {
+        "rate": 9.8,
+        "count": 900
+    }
+
+}
+
+### Delete para eliminar un producto
+DELETE http://localhost:3000/products/9
+
+### GET para obtener todos los productos filtrados por parametros
+GET http://localhost:3000/products?title=Fjallraven - Foldsack No. 1 Backpack, Fits 15 Laptops
+
+### Otro diferente
+GET http://localhost:3000/products?rating={"rate":3.9,"count":120}

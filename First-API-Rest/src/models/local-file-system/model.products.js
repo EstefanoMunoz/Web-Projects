@@ -22,13 +22,12 @@ Esto hace el código más simple, eficiente y fácil de mantener. */
         // Lógica para obtener un producto por ID
         const products = await readJSON(DATA_SOURCE);
         const product = products.find(product => product.id === Number(id));    // Filtra los productos comparando los id de cada uno con el id solicitado.
-        console.log(product);
+
         return product;
     }
     
     static async update({ id, input }) {
         // Lógica para actualizar parcialmente (ciertos campos) un producto (patch) y/o reemplazar un producto existente por otro nuevo (put).
-        //console.log(input);
         const products = await readJSON(DATA_SOURCE);
         const index = products.findIndex(prev => prev.id === Number(id));   // Busca la posición/indice del producto a modificar.
 
